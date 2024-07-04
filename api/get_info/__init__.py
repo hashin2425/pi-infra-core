@@ -4,6 +4,7 @@ import json
 import azure.cosmos as cosmos
 import azure.functions as func
 
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     COSMOS_CONNECTION_STRING = os.environ["COSMOS_CONNECTION_STRING"]
     COSMOS_DATABASE_NAME = os.environ["COSMOS_DATABASE_NAME"]
@@ -13,7 +14,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     cosmos_database = cosmos_client.get_database_client(COSMOS_DATABASE_NAME)
     cosmos_container = cosmos_database.get_container_client(COSMOS_CONTAINER_NAME)
 
-    item = cosmos_container.read_item(item="protocol", partition_key="protocol")
+    item = cosmos_container.read_item(item="main-id", partition_key="main-ItemName")
 
     body_dict = {}
     body_dict["room_temperature"] = item["room_temperature"]
