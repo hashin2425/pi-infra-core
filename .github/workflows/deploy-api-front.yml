@@ -1,4 +1,4 @@
-name: DEPLOY - Deploy api to Azure Functions
+name: DEPLOY API FRONT - Deploy api front to Azure Functions
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: "pi-infra-api-front"
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: "./api"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "./api-front"
   PYTHON_VERSION: "3.10"
 
 jobs:
@@ -37,6 +37,6 @@ jobs:
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }} # Remove publish-profile to use Azure RBAC
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE_FRONT }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
