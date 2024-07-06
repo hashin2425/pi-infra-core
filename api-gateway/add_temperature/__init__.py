@@ -31,13 +31,13 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
         # validate the length of the item
         while len(item["timestamp"]) >= DATA_LIMIT:
-            item["timestamp"].pop()
+            item["timestamp"].pop(0)
 
         while len(item["room_temperature"]) >= DATA_LIMIT:
-            item["room_temperature"].pop()
+            item["room_temperature"].pop(0)
 
         while len(item["cpu_temperature"]) >= DATA_LIMIT:
-            item["cpu_temperature"].pop()
+            item["cpu_temperature"].pop(0)
 
         # update the item
         request_body = req.get_json()
