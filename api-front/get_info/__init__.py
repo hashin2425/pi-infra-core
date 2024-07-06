@@ -24,6 +24,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         body_dict = {}
         body_dict["room_temperature"] = item["room_temperature"]
         body_dict["cpu_temperature"] = item["cpu_temperature"]
+        body_dict["timestamp"] = item["timestamp"]
         body_json = json.dumps(body_dict)
 
         return func.HttpResponse(body=body_json, status_code=200, mimetype="application/json")
