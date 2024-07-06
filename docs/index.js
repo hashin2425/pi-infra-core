@@ -1,8 +1,9 @@
-const API_URL = "https://api.example.com/server-status";
+const API_URL = "https://api.hashin.net/get_info";
 
 // サーバー状態を更新する関数
-function updateServerStatus(isOnline) {
+function updateServerStatus(data) {
   const statusElement = document.getElementById("serverStatus");
+  const isOnline = data.timestamp[data.timestamp.length - 1] > Date.now() / 1000 - 300;
   statusElement.className = isOnline ? "status online" : "status offline";
   statusElement.textContent = isOnline ? "オンライン" : "オフライン";
 }
@@ -10,6 +11,16 @@ function updateServerStatus(isOnline) {
 // 温度を更新する関数
 function updateTemperature(elementId, temperature) {
   document.getElementById(elementId).textContent = `${temperature.toFixed(1)}°C`;
+}
+
+// タイムスタンプを生成する関数
+function generateTimestamps(dataLength) {
+  const now = new Date();
+  const timestamps = [];
+  for (let i = 0; i < dataLength; i++) {
+    timestamps.unshift(new Date(now - i * 60000)); // 1分ごとのデータと仮定
+  }
+  return timestamps;
 }
 
 // グラフオプション
@@ -49,6 +60,10 @@ const options = {
   },
   xaxis: {
     type: "datetime",
+    labels: {
+      datetimeUTC: false,
+      format: "MM/dd HH:mm",
+    },
   },
   yaxis: {
     labels: {
@@ -62,7 +77,7 @@ const options = {
   },
   tooltip: {
     x: {
-      format: "HH:mm:ss",
+      format: "MM/dd HH:mm",
     },
   },
   theme: {
@@ -79,7 +94,6 @@ function showError(message) {
   errorElement.textContent = message;
   errorElement.style.display = "block";
 }
-
 // データを取得して更新する関数
 async function fetchAndUpdateData() {
   try {
@@ -90,33 +104,28 @@ async function fetchAndUpdateData() {
     const data = await response.json();
 
     // データを更新
-    updateServerStatus(data.isOnline);
-    updateTemperature("roomTemperature", data.roomTemperature);
-    updateTemperature("cpuTemperature", data.cpuTemperature);
+    updateServerStatus(data);
+    if (data.room_temperature.length > 0 && data.cpu_temperature.length > 0 && data.timestamp.length > 0) {
+      updateTemperature("roomTemperature", data.room_temperature[data.room_temperature.length - 1]);
+      updateTemperature("cpuTemperature", data.cpu_temperature[data.cpu_temperature.length - 1]);
 
-    // グラフを更新
-    const now = new Date().getTime();
-    chart.appendData([
-      {
-        data: [{ x: now, y: data.roomTemperature }],
-      },
-      {
-        data: [{ x: now, y: data.cpuTemperature }],
-      },
-    ]);
+      // グラフを更新
+      const newData = data.timestamp.map((time, index) => ({
+        x: new Date(time * 1000), // Convert Unix timestamp to JavaScript Date object
+        y1: data.room_temperature[index],
+        y2: data.cpu_temperature[index],
+      }));
 
-    // 最新の30データポイントのみを表示
-    if (chart.w.globals.series[0].length > 30) {
-      chart.updateOptions({
-        series: [
-          {
-            data: chart.w.globals.series[0].slice(-30),
-          },
-          {
-            data: chart.w.globals.series[1].slice(-30),
-          },
-        ],
-      });
+      chart.updateSeries([
+        {
+          name: "室温",
+          data: newData.map((item) => ({ x: item.x, y: item.y1 })),
+        },
+        {
+          name: "CPU温度",
+          data: newData.map((item) => ({ x: item.x, y: item.y2 })),
+        },
+      ]);
     }
 
     // エラーメッセージを非表示に
