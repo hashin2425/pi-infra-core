@@ -23,6 +23,13 @@ function generateTimestamps(dataLength) {
   return timestamps;
 }
 
+// エラーメッセージを表示する関数
+function showError(message) {
+  const errorElement = document.getElementById("errorMessage");
+  errorElement.textContent = message;
+  errorElement.style.display = "block";
+}
+
 // グラフオプション
 const options = {
   series: [
@@ -85,15 +92,14 @@ const options = {
   },
 };
 
-const chart = new ApexCharts(document.querySelector("#temperatureChart"), options);
-chart.render();
+const roomTemperatureChart = new ApexCharts(document.querySelector("#roomTemperatureChart"), options);
+roomTemperatureChart.render();
 
-// エラーメッセージを表示する関数
-function showError(message) {
-  const errorElement = document.getElementById("errorMessage");
-  errorElement.textContent = message;
-  errorElement.style.display = "block";
-}
+const cpuTemperatureChart = new ApexCharts(document.querySelector("#cpuTemperatureChart"), options);
+cpuTemperatureChart.render();
+
+let lastData = {};
+
 // データを取得して更新する関数
 async function fetchAndUpdateData() {
   try {
@@ -102,6 +108,7 @@ async function fetchAndUpdateData() {
       throw new Error("ネットワークエラーが発生しました");
     }
     const data = await response.json();
+    lastData = data;
 
     // データを更新
     updateServerStatus(data);
@@ -111,16 +118,18 @@ async function fetchAndUpdateData() {
 
       // グラフを更新
       const newData = data.timestamp.map((time, index) => ({
-        x: new Date(time * 1000), // Convert Unix timestamp to JavaScript Date object
+        x: new Date(time * 1000),
         y1: data.room_temperature[index],
         y2: data.cpu_temperature[index],
       }));
 
-      chart.updateSeries([
+      roomTemperatureChart.updateSeries([
         {
           name: "室温",
           data: newData.map((item) => ({ x: item.x, y: item.y1 })),
         },
+      ]);
+      cpuTemperatureChart.updateSeries([
         {
           name: "CPU温度",
           data: newData.map((item) => ({ x: item.x, y: item.y2 })),
@@ -136,8 +145,18 @@ async function fetchAndUpdateData() {
   }
 }
 
+function updateLastUpdated() {
+  // 最終更新日時を表示
+  const lastUpdatedDate = new Date(lastData.timestamp[lastData.timestamp.length - 1] * 1000).toLocaleString();
+  const passedMinutes = Math.floor(Date.now() / 1000 - lastData.timestamp[lastData.timestamp.length - 1]);
+  document.getElementById("lastUpdated").textContent = lastUpdatedDate + " (" + passedMinutes + "秒前)";
+}
+
 // 初回データ取得
 fetchAndUpdateData();
 
 // 定期的にデータを更新（60秒ごと）
 setInterval(fetchAndUpdateData, 60000);
+
+// 最終更新日時を表示（1秒ごと）
+setInterval(updateLastUpdated, 1000);
