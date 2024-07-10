@@ -5,7 +5,7 @@ import logging
 import azure.cosmos as cosmos
 import azure.functions as func
 
-DATA_LIMIT = 1024
+DATA_LIMIT = 4096
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
