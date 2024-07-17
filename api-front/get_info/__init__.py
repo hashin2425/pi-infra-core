@@ -2,8 +2,13 @@ import os
 import json
 import logging
 
+import numpy as np
 import azure.cosmos as cosmos
 import azure.functions as func
+
+
+def moving_average(data, window_size):
+    return np.convolve(data, np.ones(window_size), "valid") / window_size
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -22,9 +27,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         item = cosmos_container.read_item(item="main-id", partition_key="main-ItemName")
 
         body_dict = {}
-        body_dict["room_temperature"] = item["room_temperature"]
-        body_dict["cpu_temperature"] = item["cpu_temperature"]
-        body_dict["timestamp"] = item["timestamp"]
+        WINDOW_SIZE = 10
+        body_dict["room_temperature"] = moving_average(item["room_temperature"], WINDOW_SIZE)
+        body_dict["cpu_temperature"] = moving_average(item["cpu_temperature"], WINDOW_SIZE)
+        body_dict["timestamp"] = moving_average(item["timestamp"], WINDOW_SIZE)
         body_json = json.dumps(body_dict)
 
         return func.HttpResponse(body=body_json, status_code=200, mimetype="application/json")
