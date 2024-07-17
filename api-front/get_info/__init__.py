@@ -7,8 +7,9 @@ import azure.cosmos as cosmos
 import azure.functions as func
 
 
-def moving_average(data, window_size):
-    return np.convolve(data, np.ones(window_size), "valid") / window_size
+def moving_average(data, window_size) -> list:
+    np_array = np.convolve(data, np.ones(window_size), "valid") / window_size
+    return np_array.tolist()
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
