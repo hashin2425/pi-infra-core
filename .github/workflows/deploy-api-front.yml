@@ -3,6 +3,8 @@ name: DEPLOY API FRONT - Deploy api front to Azure Functions
 on:
   push:
     branches: ["release"]
+    paths:
+      - "./api-front/**"
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./api-front"
