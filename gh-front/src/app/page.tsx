@@ -1,113 +1,169 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+const API_URL = "https://api.hashin.net/get_info";
 
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+// ApexChartsをクライアントサイドでのみ動作するように動的インポート
+const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+interface ChartData {
+  x: Date;
+  y: number;
 }
+
+interface ApiData {
+  timestamp: number[];
+  room_temperature: number[];
+  cpu_temperature: number[];
+}
+
+const Dashboard: React.FC = () => {
+  const [serverStatus, setServerStatus] = useState<string>("オフライン");
+  const [roomTemperature, setRoomTemperature] = useState<number>(0);
+  const [cpuTemperature, setCpuTemperature] = useState<number>(0);
+  const [lastUpdated, setLastUpdated] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [roomChartData, setRoomChartData] = useState<ChartData[]>([]);
+  const [cpuChartData, setCpuChartData] = useState<ChartData[]>([]);
+
+  const updateServerStatus = (data: ApiData) => {
+    const isOnline = data.timestamp[data.timestamp.length - 1] > Date.now() / 1000 - 300;
+    setServerStatus(isOnline ? "オンライン" : "オフライン");
+  };
+
+  const updateLastUpdated = (timestamp: number) => {
+    const lastUpdatedDate = new Date(timestamp * 1000).toLocaleString();
+    const passedSeconds = Math.floor(Date.now() / 1000 - timestamp);
+    setLastUpdated(`${lastUpdatedDate} (${passedSeconds}秒前)`);
+  };
+
+  const fetchAndUpdateData = async () => {
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error("ネットワークエラーが発生しました");
+      }
+      const data: ApiData = await response.json();
+
+      updateServerStatus(data);
+      if (data.room_temperature.length > 0 && data.cpu_temperature.length > 0 && data.timestamp.length > 0) {
+        setRoomTemperature(data.room_temperature[data.room_temperature.length - 1]);
+        setCpuTemperature(data.cpu_temperature[data.cpu_temperature.length - 1]);
+
+        const newChartData = data.timestamp.map((time, index) => ({
+          x: new Date(time * 1000),
+          y: data.room_temperature[index],
+        }));
+        setRoomChartData(newChartData);
+
+        const newCpuChartData = data.timestamp.map((time, index) => ({
+          x: new Date(time * 1000),
+          y: data.cpu_temperature[index],
+        }));
+        setCpuChartData(newCpuChartData);
+
+        updateLastUpdated(data.timestamp[data.timestamp.length - 1]);
+      }
+
+      setErrorMessage("");
+    } catch (error) {
+      console.error("データの取得中にエラーが発生しました:", error);
+      setErrorMessage("データの取得中にエラーが発生しました。しばらくしてからもう一度お試しください。");
+    }
+  };
+
+  useEffect(() => {
+    fetchAndUpdateData();
+    const intervalId = setInterval(fetchAndUpdateData, 60000);
+    const updateIntervalId = setInterval(() => updateLastUpdated(Date.now() / 1000), 1000);
+
+    return () => {
+      clearInterval(intervalId);
+      clearInterval(updateIntervalId);
+    };
+  }, []);
+
+  const chartOptions = {
+    chart: {
+      type: "area" as const,
+      height: 300,
+      animations: {
+        enabled: true,
+        easing: "easeinout",
+        speed: 800,
+        animateGradually: {
+          enabled: true,
+          delay: 150,
+        },
+        dynamicAnimation: {
+          enabled: true,
+          speed: 350,
+        },
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth" as const,
+    },
+    xaxis: {
+      type: "datetime" as const,
+      labels: {
+        datetimeUTC: false,
+        format: "MM/dd HH:mm",
+      },
+    },
+    yaxis: {
+      labels: {
+        formatter: function (val: number) {
+          return val.toFixed(1) + "°C";
+        },
+      },
+    },
+    legend: {
+      position: "top" as const,
+    },
+    tooltip: {
+      x: {
+        format: "MM/dd HH:mm",
+      },
+    },
+    theme: {
+      palette: "palette2",
+    },
+  };
+
+  return (
+    <div>
+      <h1>サーバー状態モニター</h1>
+
+      <div id="serverStatus" className={`status ${serverStatus === "オンライン" ? "online" : "offline"}`}>
+        {serverStatus}
+        最終更新: <span id="lastUpdated">{lastUpdated}</span>
+      </div>
+      {errorMessage && (
+        <div id="errorMessage" style={{ display: "block", color: "red" }}>
+          {errorMessage}
+        </div>
+      )}
+
+      <div id="roomTemperatureChart">
+        <h2>
+          室温: <span id="roomTemperature">{roomTemperature.toFixed(1)}°C</span>
+        </h2>
+        <ApexCharts options={chartOptions} series={[{ name: "室温", data: roomChartData }]} type="area" height={300} />
+      </div>
+      <div id="cpuTemperatureChart">
+        <h2>
+          CPU温度: <span id="cpuTemperature">{cpuTemperature.toFixed(1)}°C</span>
+        </h2>
+        <ApexCharts options={chartOptions} series={[{ name: "CPU温度", data: cpuChartData }]} type="area" height={300} />
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;
