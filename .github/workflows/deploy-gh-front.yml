@@ -3,8 +3,8 @@ name: DEPLOY GH FRONT - Deploy gh front to GitHub Pages
 on:
   push:
     branches: ["release"]
-    paths:
-      - "./gh-front/**"
+    #paths:
+    #  - "./gh-front/**"
 
 jobs:
   build-and-deploy:

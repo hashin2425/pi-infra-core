@@ -3,8 +3,8 @@ name: DEPLOY API GATEWAY - Deploy api gateway to Azure Functions
 on:
   push:
     branches: ["release"]
-    paths:
-      - "./api-gateway/**"
+    #paths:
+    #  - "./api-gateway/**"
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./api-gateway"
