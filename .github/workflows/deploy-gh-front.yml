@@ -29,11 +29,6 @@ jobs:
           cd ./gh-front
           npm run build
 
-      - name: Export
-        run: |
-          cd ./gh-front
-          npm run export
-
       - name: Move build to docs
         run: |
           rm -rf ./docs/
