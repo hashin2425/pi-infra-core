@@ -2,9 +2,10 @@ name: DEPLOY WEB BACKEND - Deploy web backend to Azure Web App
 
 on:
   push:
-    branches: ["release"]
+    branches:
+      - "release"
     paths:
-      - "./web-backend/**"
+      - "web-backend/**"
 
 jobs:
   build-and-deploy:

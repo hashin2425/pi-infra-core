@@ -7,8 +7,8 @@ on:
   push:
     branches:
       - "release"
-    paths:
-      - "gh-front/**"
+    #paths:
+    #  - "gh-front/**"
 
 jobs:
   build-and-deploy:
