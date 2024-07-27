@@ -91,7 +91,6 @@ const Dashboard: React.FC = () => {
       height: 300,
       animations: {
         enabled: true,
-        easing: "easeinout",
         speed: 800,
         animateGradually: {
           enabled: true,
@@ -137,13 +136,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>サーバー状態モニター</h1>
-
-      <div id="serverStatus" className={`status ${serverStatus === "オンライン" ? "online" : "offline"}`}>
-        {serverStatus}
-        最終更新: <span id="lastUpdated">{lastUpdated}</span>
-      </div>
+    <div className="p-4">
       {errorMessage && (
         <div id="errorMessage" style={{ display: "block", color: "red" }}>
           {errorMessage}
@@ -151,14 +144,14 @@ const Dashboard: React.FC = () => {
       )}
 
       <div id="roomTemperatureChart">
-        <h2>
-          室温: <span id="roomTemperature">{roomTemperature.toFixed(1)}°C</span>
+        <h2 className="text-base">
+          室温: <span className="text-blue-500 font-bold text-2xl" id="roomTemperature">{roomTemperature.toFixed(1)}°C</span>
         </h2>
         <ApexCharts options={chartOptions} series={[{ name: "室温", data: roomChartData }]} type="area" height={300} />
       </div>
       <div id="cpuTemperatureChart">
-        <h2>
-          CPU温度: <span id="cpuTemperature">{cpuTemperature.toFixed(1)}°C</span>
+        <h2 className="text-base">
+          CPU温度: <span className="text-blue-500 font-bold text-2xl" id="cpuTemperature">{cpuTemperature.toFixed(1)}°C</span>
         </h2>
         <ApexCharts options={chartOptions} series={[{ name: "CPU温度", data: cpuChartData }]} type="area" height={300} />
       </div>
