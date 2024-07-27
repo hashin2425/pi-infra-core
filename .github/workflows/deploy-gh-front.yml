@@ -1,8 +1,12 @@
 name: DEPLOY GH FRONT - Deploy gh front to GitHub Pages
 
+permissions:
+  contents: write
+
 on:
   push:
-    branches: ["release"]
+    branches:
+      - "release"
     paths:
       - "gh-front/**"
 
@@ -28,11 +32,6 @@ jobs:
         run: |
           cd ./gh-front
           npm run build
-
-      - name: Export
-        run: |
-          cd ./gh-front
-          npm run export
 
       - name: Move build to docs
         run: |
