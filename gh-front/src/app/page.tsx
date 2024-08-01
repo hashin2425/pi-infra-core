@@ -77,11 +77,11 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     fetchAndUpdateData();
     const intervalId = setInterval(fetchAndUpdateData, 60000);
-    const updateIntervalId = setInterval(() => updateLastUpdated(Date.now() / 1000), 1000);
+    //const updateIntervalId = setInterval(() => updateLastUpdated(Date.now() / 1000), 1000);
 
     return () => {
       clearInterval(intervalId);
-      clearInterval(updateIntervalId);
+      //clearInterval(updateIntervalId);
     };
   }, []);
 
