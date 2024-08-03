@@ -13,6 +13,10 @@ def moving_average(data, window_size) -> list:
     return np_array.tolist()
 
 
+def truncate_to_second_decimal(numbers):
+    return [int(num * 100) / 100 for num in numbers]
+
+
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.ERROR)
@@ -43,15 +47,15 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     "name": "room_temperature",
                     "display_name": "Room Temperature",
                     "value": item["room_temperature"][-1],
-                    "x": temp_room_temperature,
-                    "y": temp_timestamp,
+                    "x": truncate_to_second_decimal(temp_room_temperature),
+                    "y": truncate_to_second_decimal(temp_timestamp),
                 },
                 {
                     "name": "cpu_temperature",
                     "display_name": "CPU Temperature",
                     "value": item["cpu_temperature"][-1],
-                    "x": temp_cpu_temperature,
-                    "y": temp_timestamp,
+                    "x": truncate_to_second_decimal(temp_cpu_temperature),
+                    "y": truncate_to_second_decimal(temp_timestamp),
                 },
             ],
             "running_jobs": [
