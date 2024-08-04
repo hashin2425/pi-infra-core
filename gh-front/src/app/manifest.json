@@ -1,0 +1,18 @@
+{
+  "short_name": "pi-infra-core",
+  "name": "pi-infra-core",
+  "description": "pi-infra-core",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "256x256",
+      "type": "image/x-icon"
+    }
+  ],
+  "start_url": "./",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "lang": "ja-JP",
+  "form_factor": "wide"
+}
