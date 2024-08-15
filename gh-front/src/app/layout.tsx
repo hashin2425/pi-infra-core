@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans } from "next/font/google";
+import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import "../styles/globals.scss";
 
-const notoSans = Noto_Sans({ subsets: ["latin"] });
+const mainFont = Noto_Sans_JP({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "pi-infra-dashboard",
@@ -18,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={notoSans.className}>
+      <body className={mainFont.className}>
         <div className="min-w-[400px]">
           <Header />
           {children}
