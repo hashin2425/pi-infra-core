@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -103,17 +103,24 @@ function getElapsedTimeString(startTime: Date): string {
 }
 
 function MachineStatusDisplay({ status }: { status: MachineStatusProps }) {
-  const isHaveChartData = Array.isArray(status.x) && Array.isArray(status.y) && status.x.length === status.y.length;
-  let chartData: ChartDataProps[];
-  if (isHaveChartData) {
-    chartData = status.x.map((x: number, index: number) => ({ x: new Date(status.x[index] * 1000), y: status.y[index] }));
-  }
+  const chartData: ChartDataProps[] = useMemo(() => {
+    if (Array.isArray(status.x) && Array.isArray(status.y) && status.x.length === status.y.length) {
+      return status.x.map((x, index) => ({
+        x: new Date(x * 1000),
+        y: status.y![index],
+      }));
+    }
+    return [];
+  }, [status.x, status.y]);
+
+  const hasChartData = chartData.length > 0;
+
   return (
     <div className="p-2">
       <div className="bg-white shadow-xl rounded-xl p-4">
         <h3 className="text-lg">{status.display_name}</h3>
         <p className="text-xl text-blue-500 font-bold">{status.value}</p>
-        {isHaveChartData && <ApexCharts options={chartOptions} series={[{ name: "", data: chartData }]} type="area" height={350} />}
+        {hasChartData && <ApexCharts options={chartOptions} series={[{ name: status.display_name, data: chartData }]} type="area" height={350} />}
       </div>
     </div>
   );
