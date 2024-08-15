@@ -1,3 +1,19 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+@layer components {
+  .gray-table {
+    tbody {
+      tr {
+        @apply border border-gray-800;
+        th {
+          @apply py-1 px-2 bg-gray-800 text-white text-left;
+        }
+        td {
+          @apply py-1 px-2;
+        }
+      }
+    }
+  }
+}
