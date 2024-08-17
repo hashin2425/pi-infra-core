@@ -116,8 +116,8 @@ function MachineStatusDisplay({ status }: { status: MachineStatusProps }) {
   const hasChartData = chartData.length > 0;
 
   return (
-    <div className="p-2">
-      <div className="bg-white shadow-xl rounded-xl p-4">
+    <div className="p-2 w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/3">
+      <div className="bg-white shadow-xl rounded-xl p-4 w-full">
         <h3 className="text-lg">{status.display_name}</h3>
         <p className="text-xl text-blue-500 font-bold">{status.value}</p>
         {hasChartData && <ApexCharts options={chartOptions} series={[{ name: status.display_name, data: chartData }]} type="area" height={350} />}
@@ -191,11 +191,13 @@ const Main: React.FC = () => {
           </tr>
         </tbody>
       </table>
-      {machineStatus.map((status, index) => {
-        if (status) {
-          return <MachineStatusDisplay status={status} key={index} />;
-        }
-      })}
+      <div className="flex flex-wrap">
+        {machineStatus.map((status, index) => {
+          if (status) {
+            return <MachineStatusDisplay status={status} key={index} />;
+          }
+        })}
+      </div>
     </main>
   );
 };
