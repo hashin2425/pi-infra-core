@@ -3,7 +3,9 @@ name: DEPLOY API A FRONT - Deploy api a front to AWS Lambda
 on:
   push:
     branches:
-      - main
+      - "release"
+    paths:
+      - "api-a-front/**"
 
 jobs:
   deploy:
