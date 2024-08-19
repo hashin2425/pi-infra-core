@@ -27,7 +27,7 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: setup-python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
