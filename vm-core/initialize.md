@@ -36,4 +36,26 @@ found 0 vulnerabilities
 Success! Created app at
 ```
 
-## 2. ``
+## 2. Add files
+
+```txt
+app/
+├── src/
+│   ├── app/
+│   │   ├── api/
+│   │   │   └── users/
+│   │   │       └── route.ts  # ユーザー関連のAPIエンドポイント
+│   │   ├── components/
+│   │   │   └── UserList.tsx  # ユーザーリストを表示するReactコンポーネント
+│   │   ├── layout.tsx        # アプリケーション全体のレイアウト
+│   │   └── page.tsx          # メインページのコンポーネント（App Router）
+│   ├── pages/
+│   │   └── hoge.tsx          # 追加のページコンポーネント（Pages Router）
+│   ├── libs/
+│   │   └── redis.ts          # Redisクライアントの設定と接続関数
+│   └── types/
+│       └── index.ts          # TypeScript型定義ファイル
+├── public/                   # 静的ファイル用ディレクトリ
+├── package.json              # プロジェクトの依存関係とスクリプト
+└── tsconfig.json             # TypeScript設定ファイル
+```
