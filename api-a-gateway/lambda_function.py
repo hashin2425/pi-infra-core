@@ -12,9 +12,6 @@ TABLE_NAME = os.environ.get("TABLE_NAME")
 ITEM_NAME = "main-item"
 DATA_LIMIT = 4096
 
-dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table(TABLE_NAME)
-
 
 def default(obj) -> object:
     if isinstance(obj, Decimal):
@@ -30,7 +27,7 @@ def default(obj) -> object:
         return None
 
 
-def save_value(value: dict):
+def save_value(value: dict, table):
     item = value.copy()
     item["id"] = ITEM_NAME
     # floatがサポートされていないので、decimal.Decimal
@@ -38,7 +35,7 @@ def save_value(value: dict):
     table.put_item(Item=serialized_data)
 
 
-def fetch_item() -> dict:
+def fetch_item(table) -> dict:
     response = table.get_item(Key={"id": ITEM_NAME})
     item = response.get("Item")
     if item:
@@ -56,37 +53,47 @@ def validate_number(raw) -> float:
         return -1
 
 
+def process_data(item: dict, request_body: dict):
+    # Dequeなどで高速化するコードも試したが、結局これが一番速かった。キャストするのに余計に時間がかかる。
+
+    # validate the item
+    for key in ["room_temperature", "cpu_temperature", "timestamp"]:
+        if key not in item:
+            item[key] = []
+
+    # validate the length of the item
+    while len(item["timestamp"]) >= DATA_LIMIT:
+        item["timestamp"].pop(0)
+
+    while len(item["room_temperature"]) >= DATA_LIMIT:
+        item["room_temperature"].pop(0)
+
+    while len(item["cpu_temperature"]) >= DATA_LIMIT:
+        item["cpu_temperature"].pop(0)
+
+    # update the item
+    item["timestamp"].append(validate_number(request_body["timestamp"]))
+    item["room_temperature"].append(validate_number(request_body["room_temperature"]))
+    item["cpu_temperature"].append(validate_number(request_body["cpu_temperature"]))
+
+    return item
+
+
 def lambda_handler(event, context):
     try:
+        dynamodb = boto3.resource("dynamodb")
+        table = dynamodb.Table(TABLE_NAME)
+
         response_body = {
             "message": dt.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
 
-        item: dict = fetch_item()
+        item: dict = fetch_item(table)
+        received_data: dict = json.loads(event["body"])
 
-        # validate the item
-        for key in ["room_temperature", "cpu_temperature", "timestamp"]:
-            if key not in item:
-                item[key] = []
+        result = process_data(item, received_data)
 
-        # validate the length of the item
-        while len(item["timestamp"]) >= DATA_LIMIT:
-            item["timestamp"].pop(0)
-
-        while len(item["room_temperature"]) >= DATA_LIMIT:
-            item["room_temperature"].pop(0)
-
-        while len(item["cpu_temperature"]) >= DATA_LIMIT:
-            item["cpu_temperature"].pop(0)
-
-        # update the item
-        request_body = json.loads(event["body"])
-        item["timestamp"].append(validate_number(request_body["timestamp"]))
-        item["room_temperature"].append(validate_number(request_body["room_temperature"]))
-        item["cpu_temperature"].append(validate_number(request_body["cpu_temperature"]))
-
-        # write the item
-        save_value(item)
+        save_value(result, table)
 
         return {"statusCode": 200, "body": json.dumps(response_body)}
     except (Exception, ValueError) as e:
