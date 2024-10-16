@@ -59,3 +59,38 @@ app/
 ├── package.json              # プロジェクトの依存関係とスクリプト
 └── tsconfig.json             # TypeScript設定ファイル
 ```
+
+## Ask to AI
+
+```md
+このプロジェクトは、Next.js 13以降を使用したウェブアプリケーションです。主な特徴は以下の通りです：
+
+1. フレームワーク: Next.js（バージョン13以降）
+2. 言語: TypeScript
+3. バックエンド: Next.js API Routes
+4. フロントエンド: React
+5. データベース: Redis
+6. コンテナ化: Docker使用
+
+プロジェクト構造:
+- App RouterとPages Routerを併用
+- src/appディレクトリでApp Router機能を使用
+- src/pagesディレクトリで従来のPages Router機能も使用
+
+主要コンポーネント:
+- ユーザー管理機能（リスト表示、追加）
+- RedisクライアントによるデータStorageとAPI連携
+
+ディレクトリ構成:
+- src/app: App Routerによるメインページとコンポーネント
+- src/pages: Pages Routerによる追加ページ
+- src/app/api: APIエンドポイント
+- src/libs: ユーティリティ関数（Redisクライアントなど）
+- src/types: TypeScript型定義
+
+開発環境:
+- Dockerを使用してRedisコンテナとアプリケーションコンテナを管理
+- npm をパッケージマネージャーとして使用
+
+このプロジェクトは、現代的なNext.jsの機能を活用しつつ、段階的な移行や柔軟な開発を可能にする構成となっています。
+```
